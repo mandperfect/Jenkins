@@ -7,9 +7,9 @@ pipeline {
     }
 
     environment {
-        DOCKERHUB_USER = "derrikjerry"
-        IMAGE_NAME = "testapp3"
-        IMAGE_TAG = "latest"
+        DOCKERHUB_USER = "mandperfect"
+        IMAGE_NAME = "Mani_ImageName"
+        IMAGE_TAG = "v1.0"
     }
     stages {
         stage('Checkout') {
