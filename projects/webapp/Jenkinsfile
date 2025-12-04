@@ -8,8 +8,8 @@ pipeline {
 
     environment {
         DOCKERHUB_USER = "mandperfect"
-        IMAGE_NAME = "Mani_ImageName"
-        IMAGE_TAG = "v1.0"
+        IMAGE_NAME = "maniimagename"
+        IMAGE_TAG = "v1"
     }
     stages {
         stage('Checkout') {
