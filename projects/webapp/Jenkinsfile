@@ -1,0 +1,58 @@
+pipeline {
+    agent {
+        docker {
+            image 'docker:29.0-cli'
+            args '--privileged -v /var/run/docker.sock:/var/run/docker.sock --user root'
+        }
+    }
+
+    environment {
+        DOCKERHUB_USER = "derrikjerry"
+        IMAGE_NAME = "testapp3"
+        IMAGE_TAG = "latest"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh """
+                    echo "Building Docker Image..."
+                    docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG -f projects/webapp/Dockerfile projects/webapp
+                """
+            }
+        }
+
+        stage('Login to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-cred',
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS'
+                )]) {
+                    sh '''
+                        echo $PASS | docker login -u $USER --password-stdin
+                    '''
+                }
+            }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                sh """
+                    echo "Pushing image..."
+                    docker push $DOCKERHUB_USER/$IMAGE_NAME:$IMAGE_TAG
+                """
+            }
+        }
+    }
+
+    post {
+        success { echo "CI Passed" }
+        failure { echo "CI Failed" }
+    }
+}
+
