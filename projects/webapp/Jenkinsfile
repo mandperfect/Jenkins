@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         DOCKERHUB_USER = "mandperfect"
-        IMAGE_NAME = "maniimagename"
+        IMAGE_NAME = "manipipeline"
         IMAGE_TAG = "v1"
     }
     stages {
